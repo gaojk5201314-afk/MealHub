@@ -53,11 +53,13 @@ public class AliOssUtil {
         }
 
         //文件访问路径规则 https://BucketName.Endpoint/ObjectName
+        // 去除 endpoint 中的协议前缀（如果存在）
+        String endpointWithoutProtocol = endpoint.replace("https://", "").replace("http://", "");
         StringBuilder stringBuilder = new StringBuilder("https://");
         stringBuilder
                 .append(bucketName)
                 .append(".")
-                .append(endpoint)
+                .append(endpointWithoutProtocol)
                 .append("/")
                 .append(objectName);
 

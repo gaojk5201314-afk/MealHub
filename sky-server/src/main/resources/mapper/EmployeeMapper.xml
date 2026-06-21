@@ -2,4 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.EmployeeMapper">
+    <select id="FindAll" resultType="com.sky.entity.Employee">
+        select * from employee e
+        <where>
+        <if test="name != null and name != ''">
+            e.name like concat('%', #{name}, '%')
+        </if>
+        </where>
+        order by create_time desc
+    </select>
+    <update id="update" parameterType="com.sky.entity.Employee">
+        update employee set status = #{status}, update_time = #{updateTime}, update_user = #{updateUser}
+        where id = #{id}
+    </update>
+    <update id="updateById" parameterType="com.sky.entity.Employee">
+        update employee
+        <set>
+        <if test="name != null and name != ''">
+            name = #{name},
+        </if>
+        <if test="sex != null">
+            sex = #{sex},
+        </if>
+        <if test="idNumber != null and idNumber != ''">
+            id_number = #{idNumber},
+        </if>
+        <if test="username != null and username != ''">
+            username = #{username},
+        </if>
+        <if test="phone != null and phone != ''">
+            phone = #{phone},
+        </if>
+        <if test="updateTime != null">
+            update_time = #{updateTime},
+        </if>
+        <if test="updateUser != null">
+            update_user = #{updateUser},
+        </if>
+       </set>
+        where id = #{id}
+    </update>
+    <select id="getById" parameterType="java.lang.Long" resultType="com.sky.entity.Employee">
+        select * from employee where id = #{id}
+    </select>
 </mapper>

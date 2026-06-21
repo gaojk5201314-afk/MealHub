@@ -6,3 +6,13 @@ sky:
     database: sky_take_out
     username: root
     password: root
+  alioss:
+    endpoint: https://oss-cn-beijing.aliyuncs.com
+    accessKeyId: ${ALIYUN_OSS_ACCESS_KEY_ID}
+    accessKeySecret: ${ALIYUN_OSS_ACCESS_KEY_SECRET}
+    bucketName: studyjavaweb-01
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 10
