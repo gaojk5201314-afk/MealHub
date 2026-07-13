@@ -26,8 +26,8 @@
     </resultMap>
 
     <insert id="insert" parameterType="com.sky.dto.SetmealDTO" useGeneratedKeys="true" keyProperty="id">
-        insert into setmeal (name, price, image, category_id, status)
-        values (#{name}, #{price}, #{image}, #{categoryId}, #{status})
+        insert into setmeal (name, price, image, category_id, status, create_time, update_time, create_user, update_user)
+        values (#{name}, #{price}, #{image}, #{categoryId}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
     </insert>
     <select id="selectList" parameterType="com.sky.dto.SetmealPageQueryDTO" resultType="com.sky.vo.SetmealVO">
         select sm.* , c.name as categoryName
@@ -78,6 +78,8 @@
             <if test="categoryId != null and categoryId!=0">
                 category_id = #{categoryId},
             </if>
+            update_time = #{updateTime},
+            update_user = #{updateUser},
         </set>
         where id = #{id}
     </update>

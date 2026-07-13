@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.UserMapper">
+        <insert id="insert" parameterType="com.sky.entity.User" useGeneratedKeys="true" keyProperty="id">
+            insert into user (openid,sex,phone,name,id_number,avatar, create_time) values (#{openid}, #{sex}, #{phone}, #{name}, #{idNumber}, #{avatar}, #{createTime})
+        </insert>
+        <select id="selectById" parameterType="java.lang.Long" resultType="com.sky.entity.User">
+            select * from user where id = #{id}
+        </select>
+        <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer">
+            select count(id) from user where create_time &gt;= #{begin} and create_time &lt; #{end}
+        </select>
+</mapper>

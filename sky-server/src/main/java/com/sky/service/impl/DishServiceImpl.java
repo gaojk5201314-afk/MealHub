@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.sky.anno.anno;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.BaseContext;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
@@ -19,6 +20,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class DishServiceImpl implements DishService {
@@ -32,6 +35,9 @@ public class DishServiceImpl implements DishService {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO,dish);
         /*向菜品表插入数据*/
+        dish.setCreateTime(LocalDateTime.now());
+        dish.setCreateUser(BaseContext.getCurrentId());
+        dish.setUpdateTime(LocalDateTime.now());
         dishMapper.insertdish(dish);
 
         //获取菜品id
@@ -68,11 +74,13 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    @anno(OperationType.UPDATE)
     public void update(DishDTO dishDTO) {
         //更新菜品基本信息
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
+        //更新菜品基本信息
+        dish.setUpdateTime(LocalDateTime.now());
+        dish.setUpdateUser(BaseContext.getCurrentId());
         dishMapper.update(dish);
 
         //删除旧口味
@@ -110,7 +118,6 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    @anno(OperationType.UPDATE)
     public void startOrStop(Dish dish) {
         // 参数已改为 Dish 对象，直接使用
         dish.setStatus(dish.getStatus());
@@ -124,6 +131,25 @@ public class DishServiceImpl implements DishService {
                 .status(StatusConstant.ENABLE)
                 .build();
         return dishMapper.list(dish);
+    }
+
+    public List<DishVO> listWithFlavor(Dish dish) {
+        List<Dish> dishList = dishMapper.list(dish);
+
+        List<DishVO> dishVOList = new ArrayList<>();
+
+        for (Dish d : dishList) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d,dishVO);
+
+            //根据菜品id查询对应的口味
+            List<DishFlavor> flavors = dishMapper.selectFlavorsByDishId(d.getId());
+
+            dishVO.setFlavors(flavors);
+            dishVOList.add(dishVO);
+        }
+
+        return dishVOList;
     }
 
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.AdminOrderMapping">
+        <update id="update" parameterType="com.sky.entity.Orders">
+            update orders
+            set status = #{status}, cancel_reason = #{cancelReason}, cancel_time = #{cancelTime}, pay_status = #{payStatus}
+            where id = #{id}
+        </update>
+        <select id="getStatistics" resultType="com.sky.entity.Orders">
+            select * from orders
+        </select>
+        <update id="updateById" parameterType="com.sky.entity.Orders">
+            update orders
+            set status = #{status}, delivery_time = #{deliveryTime}
+            where id = #{id}
+        </update>
+        <update id="RejectOrder" parameterType="com.sky.entity.Orders">
+            update orders
+            set status = #{status}, rejection_reason = #{rejectionReason}, cancel_time = #{cancelTime}, pay_status = #{payStatus}
+            where id = #{id}
+        </update>
+        <update id="ConfirmOrder" parameterType="com.sky.entity.Orders">
+            update orders
+            set status = #{status}
+            where id = #{id}
+        </update>
+        <select id="getById" parameterType="java.lang.Long" resultType="com.sky.entity.Orders">
+            select * from orders where id = #{id}
+        </select>
+        <select id="getOrderDetail" parameterType="java.lang.Long" resultType="com.sky.entity.OrderDetail">
+            select * from order_detail where order_id = #{id}
+        </select>
+        <update id="DeliveryOrder" parameterType="com.sky.entity.Orders">
+            update orders
+            set status = #{status}, estimated_delivery_time = #{estimatedDeliveryTime}
+            where id = #{id}
+        </update>
+        <select id="select" parameterType="com.sky.dto.OrdersPageQueryDTO" resultType="com.sky.entity.Orders">
+            select * from orders
+            <where>
+                <if test="status != null">
+                    and status = #{status}
+                </if>
+                <if test="number != null">
+                    and number like concat('%', #{number}, '%')
+                </if>
+                <if test="phone != null">
+                    and phone like concat('%', #{phone}, '%')
+                </if>
+                <if test="beginTime != null and endTime != null">
+                    and order_time between #{beginTime} and #{endTime}
+                </if>
+            </where>
+            order by id desc
+        </select>
+        <select id="selectAll" resultType="com.sky.entity.Orders">
+            select * from orders
+            order by id desc
+            limit 1
+        </select>
+</mapper>

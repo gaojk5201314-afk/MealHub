@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.AddressBookMapper">
+    <insert id="insert" parameterType="com.sky.entity.AddressBook" useGeneratedKeys="true" keyProperty="id">
+        insert into address_book (user_id, city_code, city_name, consignee,
+                                  detail, district_code, district_name, is_default,
+                                  label, phone, province_code, province_name, sex)
+        values (#{userId}, #{cityCode}, #{cityName}, #{consignee},
+                #{detail}, #{districtCode}, #{districtName}, #{isDefault}, #{label},
+                #{phone}, #{provinceCode}, #{provinceName}, #{sex})
+    </insert>
+    <select id="SelectByUserId" resultType="com.sky.entity.AddressBook">
+        select * from address_book where user_id = #{userId}
+        order by is_default desc
+    </select>
+    <update id="update" parameterType="com.sky.entity.AddressBook">
+        update address_book
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="cityCode != null and cityCode != ''">
+                city_code = #{cityCode},
+            </if>
+            <if test="cityName != null and cityName != ''">
+                city_name = #{cityName},
+            </if>
+            <if test="consignee != null and consignee != ''">
+                consignee = #{consignee},
+            </if>
+            <if test="detail != null and detail != ''">
+                detail = #{detail},
+            </if>
+            <if test="districtCode != null and districtCode != ''">
+                district_code = #{districtCode},
+            </if>
+            <if test="districtName != null and districtName != ''">
+                district_name = #{districtName},
+            </if>
+            <if test="isDefault != null">
+                is_default = #{isDefault},
+            </if>
+            <if test="label != null and label != ''">
+                label = #{label},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="provinceCode != null and provinceCode != ''">
+                province_code = #{provinceCode},
+            </if>
+            <if test="provinceName != null and provinceName != ''">
+                province_name = #{provinceName},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex = #{sex},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from address_book where id = #{id}
+    </delete>
+    <select id="selectById" resultType="com.sky.entity.AddressBook">
+        select * from address_book where id = #{id}
+    </select>
+    <update id="updateDefault" parameterType="java.lang.Long">
+        update address_book
+        set is_default = 1
+        where id = #{id}
+    </update>
+    <update id="resetDefaultByUserId" parameterType="java.lang.Long">
+        update address_book
+        set is_default = 0
+        where user_id = #{userId}
+    </update>
+</mapper>

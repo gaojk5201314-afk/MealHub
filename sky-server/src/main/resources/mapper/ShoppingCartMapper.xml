@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.ShoppingCartMapper">
+    <select id="SelectByDishId" resultType="com.sky.entity.ShoppingCart">
+        select * from shopping_cart where dish_id = #{dishId}
+    </select>
+    <select id="SelectBySetmealId" resultType="com.sky.entity.ShoppingCart">
+        select * from shopping_cart where setmeal_id = #{setmealId}
+    </select>
+    <update id="updateById" parameterType="com.sky.entity.ShoppingCart">
+        update shopping_cart set number = #{number} where id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.sky.entity.ShoppingCart" useGeneratedKeys="true" keyProperty="id">
+        insert into shopping_cart (user_id, dish_id, dish_flavor, number, create_time,name,image,setmeal_id,amount)
+        values (#{userId}, #{dishId}, #{dishFlavor}, #{number}, now(),#{name},#{image},#{setmealId},#{amount})
+    </insert>
+    <select id="SelectByUserId" resultType="com.sky.entity.ShoppingCart">
+        select * from shopping_cart where user_id = #{userId}
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from shopping_cart where id = #{id}
+    </delete>
+    <delete id="deleteByUserId" parameterType="java.lang.Long">
+        delete from shopping_cart where user_id = #{userId}
+    </delete>
+    <delete id="clean">
+        delete from shopping_cart
+    </delete>
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.OrderSubmitMapper">
+        <insert id="insert" parameterType="com.sky.entity.Orders" useGeneratedKeys="true" keyProperty="id">
+            insert into orders (user_id, address_book_id, amount, delivery_status,
+                                estimated_delivery_time, pack_amount, pay_method, remark,
+                                tableware_number, tableware_status, number, order_time,
+                                status, pay_status, phone, address, user_name, consignee,
+                                checkout_time, delivery_time, cancel_reason, cancel_time,rejection_reason)
+            values (#{userId}, #{addressBookId}, #{amount}, #{deliveryStatus},
+                    #{estimatedDeliveryTime}, #{packAmount}, #{payMethod}, #{remark},
+                    #{tablewareNumber}, #{tablewareStatus}, #{number}, #{orderTime},
+                    #{status}, #{payStatus}, #{phone}, #{address}, #{userName}, #{consignee},
+                    #{checkoutTime}, #{deliveryTime}, #{cancelReason}, #{cancelTime},#{rejectionReason})
+        </insert>
+        <insert id="submit" parameterType="com.sky.entity.OrderDetail" useGeneratedKeys="true" keyProperty="id">
+            insert into order_detail (order_id, dish_id, name, setmeal_id, dish_flavor, image, number, amount)
+            values
+                <foreach collection="orderDetails" item="orderDetail" separator=",">
+                    (#{orderDetail.orderId}, #{orderDetail.dishId}, #{orderDetail.name},#{orderDetail.setmealId},
+                     #{orderDetail.dishFlavor}, #{orderDetail.image}, #{orderDetail.number},
+                     #{orderDetail.amount})
+                </foreach>
+        </insert>
+        <select id="getByOrderId" parameterType="java.lang.Long" resultType="com.sky.entity.OrderDetail">
+            select * from order_detail where order_id = #{orderId}
+        </select>
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into shopping_cart (user_id, dish_id, name, setmeal_id, dish_flavor, image, number, amount, create_time)
+        values
+        <foreach collection="list" item="cart" separator=",">
+            (#{cart.userId}, #{cart.dishId}, #{cart.name}, #{cart.setmealId},
+            #{cart.dishFlavor}, #{cart.image}, #{cart.number}, #{cart.amount}, #{cart.createTime})
+        </foreach>
+    </insert>
+    <select id="pageQuery" resultType="Orders">
+        select * from orders
+        <where>
+            <if test="number != null and number!=''">
+                and number like concat('%',#{number},'%')
+            </if>
+            <if test="phone != null and phone!=''">
+                and phone like concat('%',#{phone},'%')
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="beginTime != null">
+                and order_time &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and order_time &lt;= #{endTime}
+            </if>
+        </where>
+        order by order_time desc
+    </select>
+    <select id="getById" parameterType="java.lang.Long" resultType="Orders">
+        select * from orders where id = #{id}
+    </select>
+    <update id="updateById" parameterType="com.sky.entity.Orders">
+        update orders set status = #{status}, cancel_time = #{cancelTime}, pay_status = #{payStatus}, cancel_reason = #{cancelReason}
+        where id = #{id}
+    </update>
+    <update id="update" parameterType="com.sky.entity.Orders">
+        update orders
+        <set>
+            <if test="cancelReason != null and cancelReason!='' "> cancel_reason=#{cancelReason}, </if>
+            <if test="rejectionReason != null and rejectionReason!='' "> rejection_reason=#{rejectionReason}, </if>
+            <if test="cancelTime != null"> cancel_time=#{cancelTime}, </if>
+            <if test="payStatus != null"> pay_status=#{payStatus}, </if>
+            <if test="payMethod != null"> pay_method=#{payMethod}, </if>
+            <if test="checkoutTime != null"> checkout_time=#{checkoutTime}, </if>
+            <if test="status != null"> status = #{status}, </if>
+            <if test="deliveryTime != null"> delivery_time = #{deliveryTime} </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

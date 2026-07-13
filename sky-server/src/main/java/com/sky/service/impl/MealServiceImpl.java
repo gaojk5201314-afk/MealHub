@@ -2,6 +2,7 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.context.BaseContext;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.SetmealDish;
@@ -12,6 +13,7 @@ import com.sky.vo.SetmealVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,7 +24,11 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public void save(SetmealDTO meal) {
-
+        /*手动设置创建时间、修改时间、创建人、修改人*/
+        meal.setCreateTime(LocalDateTime.now());
+        meal.setUpdateTime(LocalDateTime.now());
+        meal.setCreateUser(BaseContext.getCurrentId());
+        meal.setUpdateUser(BaseContext.getCurrentId());
         //向套餐表插入数据
         mealMapper.insert(meal);
         //批量插入套餐菜品关系
@@ -65,6 +71,9 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public void update(SetmealDTO meal) {
+        /*手动设置修改时间、修改人*/
+        meal.setUpdateTime(LocalDateTime.now());
+        meal.setUpdateUser(BaseContext.getCurrentId());
         mealMapper.update(meal);
         //更新套餐菜品关系：先删旧数据
         mealMapper.deleteSetmealDish(meal.getId());

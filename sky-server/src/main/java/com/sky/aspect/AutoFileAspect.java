@@ -68,6 +68,14 @@ public class AutoFileAspect {
         
         log.info("第一个参数类型：{}", args[0].getClass().getName());
 
+        // 检查参数是否包含updateTime字段，避免对DTO等不包含公共字段的类进行自动填充
+        try {
+            args[0].getClass().getDeclaredField("updateTime");
+        } catch (NoSuchFieldException e) {
+            log.warn("参数对象不包含updateTime字段，跳过自动填充");
+            return;
+        }
+
         /*准备赋值的数据*/
         LocalDateTime now = LocalDateTime.now();
         Long currentId = BaseContext.getCurrentId();

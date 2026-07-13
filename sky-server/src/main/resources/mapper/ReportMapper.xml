@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.ReportMapper">
+
+    <select id="Statistics" resultType="com.sky.vo.TurnoverReportVO">
+        SELECT SUM(amount) AS turnoverList
+        FROM orders
+        WHERE status = 5
+          AND order_time &gt;= #{begin}
+          AND order_time &lt; #{end}
+    </select>
+    <select id="StatisticsNewUser" resultType="java.lang.String">
+        SELECT COUNT(id) AS newUserList
+        FROM user
+        WHERE create_time &gt;= #{begin}
+          AND create_time &lt; #{end}
+    </select>
+    <select id="StatisticsUser" resultType="java.lang.String">
+        SELECT COUNT(id) AS totalUserList
+        FROM user
+        WHERE create_time &lt; #{date}
+    </select>
+    <select id="OrderStatistic" resultType="java.lang.Integer">
+        SELECT COUNT(id) AS orderCount
+        FROM orders
+        WHERE order_time &gt;= #{begin}
+          AND order_time &lt; #{end}
+    </select>
+    <select id="validOrderStatistic" resultType="java.lang.String">
+        SELECT COUNT(id) AS validOrderCount
+        FROM orders
+        WHERE status = 5
+          AND order_time &lt; #{end}
+          AND order_time &gt;= #{begin}
+    </select>
+    <select id="DailyOrderStatistic" resultType="java.lang.String">
+        SELECT COUNT(id) AS dailyOrderCount
+        FROM orders
+        WHERE order_time &gt;= #{begin}
+          AND order_time &lt; #{end}
+    </select>
+    <select id="ValidOrder" resultType="java.lang.Integer">
+        SELECT COUNT(id) AS validOrderCount
+        FROM orders
+        WHERE status = 5
+          AND order_time &gt;= #{begin}
+          AND order_time &lt; #{end}
+    </select>
+    <select id="Top10" resultType="java.util.Map">
+        SELECT od.name,sum(od.number) as number from order_detail od
+            left join orders o on od.order_id = o.id
+        where o.status = 5 and o.order_time &gt;= #{begin} and o.order_time &lt; #{end}
+        group by od.name order by number desc
+        limit 0,10
+    </select>
+    <select id="sumByMap" resultType="java.lang.Double">
+        SELECT SUM(amount) AS turnoverList
+        FROM orders
+        WHERE status = 5
+          AND order_time &gt;= #{begin}
+          AND order_time &lt; #{end}
+    </select>
+    <select id="countByMap" resultType="java.lang.Integer">
+        SELECT COUNT(id) AS orderCount
+        FROM orders
+        WHERE status = #{status}
+          AND order_time &gt;= #{begin}
+          AND order_time &lt; #{end}
+    </select>
+</mapper>
