@@ -15,8 +15,6 @@ import com.sky.mapper.UserMapper;
 import com.sky.result.PageResult;
 import com.sky.service.AddressBookService;
 import com.sky.service.OrderSubmitService;
-import com.sky.service.ShoppingCartService;
-import com.sky.task.WebSocketTask;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
@@ -24,7 +22,6 @@ import com.sky.vo.OrderVO;
 import com.sky.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;

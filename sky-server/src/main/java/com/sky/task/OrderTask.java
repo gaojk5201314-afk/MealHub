@@ -1,6 +1,7 @@
 package com.sky.task;
 
 /*定时任务类*/
+/*直接在类里面处理定时任务*/
 
 import com.sky.entity.Orders;
 import com.sky.mapper.AdminOrderMapping;

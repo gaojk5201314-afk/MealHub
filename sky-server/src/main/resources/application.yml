@@ -60,7 +60,7 @@ sky:
     secret: ${sky.wechat.secret}
   # 商家店铺地址
   shop:
-    address: 北京市大兴区拾光公寓大楼
+    address: 北京市朝阳区新街大道一号楼8层
   # 百度地图AK
   baidu:
     ak: XHmEb2EL3tIfduEcbnvrCtfXb0QNMdNO
