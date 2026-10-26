@@ -4,3 +4,7 @@
 *.class
 *Test.java
 **/test/
+
+# JVM crash logs
+hs_err_pid*.log
+replay_pid*.log
