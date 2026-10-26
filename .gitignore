@@ -8,3 +8,6 @@
 # JVM crash logs
 hs_err_pid*.log
 replay_pid*.log
+# uni-app deps & build output
+/mp-weixin/node-modules/
+/mp-weixin/mp-weixin/
